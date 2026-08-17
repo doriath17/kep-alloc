@@ -1,0 +1,2 @@
+/usr/bin/ar qc libkep-alloc.a "CMakeFiles/kep-alloc.dir/src/bump_allocator/bump_allocator.cpp.o"
+/usr/bin/ranlib libkep-alloc.a

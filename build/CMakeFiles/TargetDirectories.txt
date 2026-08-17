@@ -1,0 +1,6 @@
+/home/ale/code/kep-alloc/build/CMakeFiles/kep-alloc.dir
+/home/ale/code/kep-alloc/build/CMakeFiles/edit_cache.dir
+/home/ale/code/kep-alloc/build/CMakeFiles/rebuild_cache.dir
+/home/ale/code/kep-alloc/build/examples/CMakeFiles/demo.dir
+/home/ale/code/kep-alloc/build/examples/CMakeFiles/edit_cache.dir
+/home/ale/code/kep-alloc/build/examples/CMakeFiles/rebuild_cache.dir
