@@ -30,8 +30,7 @@ set(KEP_ALLOC_SOURCES
 # 
 set(KEP_ALLOC_HEADERS
     src/bump_allocator/bump_allocator.hpp
-#   include/kep_alloc/arena_allocator.hpp
-#   include/kep_alloc/utils.hpp
+    src/internal/system_info.hpp
 )
 
 # Create library target (controlled by standard CMake BUILD_SHARED_LIBS)
@@ -68,7 +67,7 @@ if(KEP_ALLOC_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
-# if(KEP_ALLOC_BUILD_TESTS)
-#   enable_testing()
-#   add_subdirectory(tests)
-# endif()
+if(KEP_ALLOC_BUILD_TESTS)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
