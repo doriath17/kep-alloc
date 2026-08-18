@@ -37,6 +37,9 @@ run-tests: build-tests
 run-demo: build-demo
 	./build/examples/demo
 
+docs:
+	doxygen Doxyfile
+
 # Cleanup
 clean:
 	rm -rf build

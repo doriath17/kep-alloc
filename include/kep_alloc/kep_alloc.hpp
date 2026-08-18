@@ -1,3 +1,8 @@
+/**
+ * @file kep_alloc.hpp
+ * @brief Public interface for the kep_alloc library.
+ */
+
 #pragma once
 
 // Note that including headers in this file will make them available to consumers
