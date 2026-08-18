@@ -1,1 +1,3 @@
+# Ignore build directory
+# use git rm -r --cached build if git is tracking the build folder
 build/

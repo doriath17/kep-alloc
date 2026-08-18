@@ -17,7 +17,7 @@ FetchContent_MakeAvailable(googletest)
 # ====================================================
 
 add_executable(kep_alloc_tests
-  test_system_info.cpp
+  test_internal.cpp
 )
 
 # Link against GoogleTest and kep_alloc
