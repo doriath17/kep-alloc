@@ -1,6 +1,7 @@
 # Ignore build directory
 # use git rm -r --cached build if git is tracking the build folder
 build/
+build-vscode/
 
 # Ignore auto generated documentation 
 # use doxygen Doxyfile or make docs to generate it

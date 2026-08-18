@@ -9,7 +9,7 @@ project(
 include(cmake/PreventInSourceBuilds.cmake)
 
 # Enforce C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -31,6 +31,7 @@ set(KEP_ALLOC_SOURCES
 set(KEP_ALLOC_HEADERS
     src/bump_allocator/bump_allocator.hpp
     src/internal/system_info.hpp
+    src/internal/backing/backing_policy.hpp
 )
 
 # Create library target (controlled by standard CMake BUILD_SHARED_LIBS)

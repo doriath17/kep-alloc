@@ -11,6 +11,9 @@ config-release:
 build:
 	cmake --build build -j
 
+build-debug: config-debug
+	cmake --build build -j
+
 build-lib:
 	cmake --build build --target kep-alloc -j
 

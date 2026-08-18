@@ -1,0 +1,10 @@
+{
+  "cmake.generator": "Unix Makefiles",
+  "cmake.buildDirectory": "${workspaceFolder}/build",
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+  "C_Cpp.default.cppStandard": "c++20",
+  // If errors still appear, run: C/C++: Reset IntelliSense Database.
+  "C_Cpp.default.intelliSenseMode": "linux-gcc-x64",
+  "C_Cpp.errorSquiggles": "enabled",
+  "C_Cpp.configurationWarnings": "enabled"
+}
