@@ -1,0 +1,39 @@
+---
+Language: Cpp
+BasedOnStyle: LLVM
+
+# Alignment & Indentation
+IndentWidth: 4
+ColumnLimit: 100
+UseTab: Never
+Standard: c++17
+
+# Braces
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+
+# Includes
+SortIncludes: CaseInsensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: "^<gtest/.*"
+    Priority: 4
+  - Regex: "^<.*"
+    Priority: 3
+  - Regex: '^"kep_alloc/.*'
+    Priority: 1
+  - Regex: ".*"
+    Priority: 2
+
+# Spaces & Formatting
+SpacesInParentheses: false
+SpaceBeforeParens: ControlStatements
+SpaceAfterCStyleCast: false
+PointerAlignment: Left # Renders 'void* ptr' instead of 'void *ptr'
+
+# Modern C++
+FixNamespaceComments: true
+NamespaceIndentation: None
+---
