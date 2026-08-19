@@ -8,6 +8,8 @@
 
 #include <sys/mman.h>
 
+#include "../utils.hpp"
+
 namespace kep_alloc::internal {
 
 
@@ -112,9 +114,7 @@ constexpr size_t DEFAULT_PAGE_SIZE = 4096; // Default to 4KB if sysconf fails
  * @return The page-aligned size (greater than or equal to `req_size`).
  */
 [[nodiscard]] inline size_t normalize_size(size_t req_size) noexcept {
-    static const size_t offset_mask = get_page_size() - 1;
-    static const size_t page_boundary_mask = ~offset_mask;
-    return (req_size + offset_mask) & page_boundary_mask;
+    return align(req_size, get_page_size());
 }
 
 class SystemPageBacking {

@@ -24,13 +24,13 @@ option(KEP_ALLOC_BUILD_TESTS "Build unit tests" ON)
 # Define implementation source files
 # These files are compiled into the library target but they are NOT exposed to the library consumers
 set(KEP_ALLOC_SOURCES
-    src/bump_allocator/bump_allocator.cpp
+    include/kep_alloc/kep_alloc.cpp
 )
 
 # 
 set(KEP_ALLOC_HEADERS
-    src/bump_allocator/bump_allocator.hpp
-    src/internal/system_info.hpp
+    src/arena_allocator/arena_allocator.hpp
+    src/internal/utils.hpp
     src/internal/backing/backing_policy.hpp
 )
 
