@@ -6,7 +6,7 @@ using namespace kep_alloc;
 int main() {
     std::cout << "Demo running..." << std::endl;
 
-    kep_alloc::internal::SystemPageBacking backing_policy;
+    kep_alloc::internal::SystemPageBackingStorage backing_policy;
     kep_alloc::ArenaAllocator allocator(backing_policy, 1024);
 
     void* ptr1 = allocator.allocate(128);

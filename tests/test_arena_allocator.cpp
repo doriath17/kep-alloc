@@ -18,7 +18,7 @@ Point2D random_point() {
     return Point2D(static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX);
 }
 
-Point2D* allocate_point(kep_alloc::ArenaAllocator<kep_alloc::internal::SystemPageBacking> &arena, float x = 0, float y = 0) {
+Point2D* allocate_point(kep_alloc::ArenaAllocator<kep_alloc::internal::SystemPageBackingStorage> &arena, float x = 0, float y = 0) {
     Point2D* p = static_cast<Point2D*>(arena.allocate(sizeof(Point2D), alignof(Point2D)));
     EXPECT_NE(p, nullptr);
     new (p) Point2D(x, y); // Placement new to construct
@@ -26,7 +26,7 @@ Point2D* allocate_point(kep_alloc::ArenaAllocator<kep_alloc::internal::SystemPag
 }
 
 TEST(ArenaAllocatorTest, AllocateAndReset) {
-    kep_alloc::internal::SystemPageBacking backing_policy;
+    kep_alloc::internal::SystemPageBackingStorage backing_policy;
     kep_alloc::ArenaAllocator allocator(backing_policy, KB * 4); // 4KB arena
 
     void* ptr1 = allocator.allocate(128);
@@ -42,7 +42,7 @@ TEST(ArenaAllocatorTest, AllocateAndReset) {
 }
 
 TEST(ArenaAllocatorTest, MarkerIsCorrect) {
-    kep_alloc::internal::SystemPageBacking backing_policy;
+    kep_alloc::internal::SystemPageBackingStorage backing_policy;
     kep_alloc::ArenaAllocator allocator(backing_policy, KB * 4); // 4KB arena
 
     auto p0 = allocate_point(allocator);
@@ -69,7 +69,7 @@ TEST(ArenaAllocatorTest, MarkerIsCorrect) {
 }
 
 TEST(ArenaAllocatorTest, RewindToMarker) {
-    kep_alloc::internal::SystemPageBacking backing_policy;
+    kep_alloc::internal::SystemPageBackingStorage backing_policy;
     kep_alloc::ArenaAllocator allocator(backing_policy, KB * 4); // 4KB arena
 
     auto p0 = allocate_point(allocator);

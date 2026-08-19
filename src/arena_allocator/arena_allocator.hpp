@@ -21,7 +21,7 @@ frame.
  * Usage sequence:
  * @code{.cpp}
 // 1. Setup phase (allocated once upfront)
-SystemPageBacking backing;
+SystemPageBackingStorage backing;
 ArenaAllocator arena(1024 * 1024 * 2, backing); // 2MB Arena
 
 while (game_is_running) {
@@ -68,7 +68,7 @@ the task finishes.
  * @code{.cpp}
 void compile_source_file(const std::string& source_code) {
     // 1. Task-scoped arena
-    SystemPageBacking backing;
+    SystemPageBackingStorage backing;
     ArenaAllocator parser_arena(64 * 1024, backing);
 
     // 2. Build AST nodes using arena memory
@@ -143,7 +143,7 @@ maximising it).
 
 #pragma once
 
-#include "../internal/backing/backing_policy.hpp"
+#include "../internal/backing/backing_storage.hpp"
 #include "../internal/utils.hpp"
 
 #include <cstddef>
@@ -152,7 +152,7 @@ maximising it).
 
 namespace kep_alloc {
 
-template <internal::BackingPolicy backing_policy = internal::SystemPageBacking>
+template <internal::BackingStorage backing_policy = internal::SystemPageBackingStorage>
 class ArenaAllocator {
   public:
     ArenaAllocator(backing_policy& bp, size_t init_size) : m_backing(bp) {

@@ -31,7 +31,7 @@ set(KEP_ALLOC_SOURCES
 set(KEP_ALLOC_HEADERS
     src/arena_allocator/arena_allocator.hpp
     src/internal/utils.hpp
-    src/internal/backing/backing_policy.hpp
+    src/internal/backing/backing_storage.hpp
 )
 
 # Create library target (controlled by standard CMake BUILD_SHARED_LIBS)

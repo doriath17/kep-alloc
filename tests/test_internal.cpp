@@ -1,4 +1,4 @@
-#include "internal/backing/backing_policy.hpp"
+#include "internal/backing/backing_storage.hpp"
 
 #include <gtest/gtest.h>
 
@@ -37,7 +37,7 @@ TEST(NormalizeSizeTest, ReturnsSufficientMemory) {
 }
 
 TEST(SystemPageBackingTest, AllocateChunkReturnsNonNullForValidSize) {
-    SystemPageBacking backing;
+    SystemPageBackingStorage backing;
     size_t page_size = get_page_size();
     void* ptr = backing.allocate_chunk(page_size);
     EXPECT_NE(ptr, nullptr);
@@ -45,24 +45,24 @@ TEST(SystemPageBackingTest, AllocateChunkReturnsNonNullForValidSize) {
 }
 
 TEST(SystemPageBackingTest, AllocateChunkReturnsNullForZeroSize) {
-    SystemPageBacking backing;
+    SystemPageBackingStorage backing;
     void* ptr = backing.allocate_chunk(0);
     EXPECT_EQ(ptr, nullptr);
 }
 
 TEST(SystemPageBackingTest, DeallocateChunkHandlesNullPointer) {
-    SystemPageBacking backing;
+    SystemPageBackingStorage backing;
     backing.deallocate_chunk(nullptr, 1024); // Should not crash or throw
 }
 
 TEST(SystemPageBackingTest, DeallocateChunkHandlesZeroSize) {
-    SystemPageBacking backing;
+    SystemPageBackingStorage backing;
     void* ptr = backing.allocate_chunk(1024);
     backing.deallocate_chunk(ptr, 0);    // Should not crash or throw
     backing.deallocate_chunk(ptr, 1024); // Clean up
 }
 
-void test_allocate_and_deallocate(SystemPageBacking& backing, size_t size,
+void test_allocate_and_deallocate(SystemPageBackingStorage& backing, size_t size,
                                   std::string_view test_case_msg = "") {
     void* ptr = backing.allocate_chunk(size);
     EXPECT_NE(ptr, nullptr) << "Allocation failed for size: " << size << " bytes. "
@@ -71,7 +71,7 @@ void test_allocate_and_deallocate(SystemPageBacking& backing, size_t size,
 }
 
 TEST(SystemPageBackingTest, AllocateAndDeallocateMultipleChunks) {
-    SystemPageBacking backing;
+    SystemPageBackingStorage backing;
     size_t page_size = get_page_size();
 
     test_allocate_and_deallocate(backing, page_size, "Testing allocation of 1 page.");

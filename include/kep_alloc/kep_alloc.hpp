@@ -10,4 +10,4 @@
 // For example, headers made to define implementation specific details should not be included here,
 // but rather in the source files.
 #include "../../src/arena_allocator/arena_allocator.hpp"
-#include "../../src/internal/backing/backing_policy.hpp"
+#include "../../src/internal/backing/backing_storage.hpp"

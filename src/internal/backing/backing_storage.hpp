@@ -34,17 +34,17 @@ namespace kep_alloc::internal {
  * actual zero costs. Furthermore, in modern C++ (C++ 20) there is also the possibility to create
  * `concepts` and actually enforce that a certain template type parameter implement that concept:
  * @code{.cpp}
- * template <BackingPolicy Backing = SystemPageBacking>
+ * template <BackingStorage Backing = SystemPageBackingStorage>
  * @endcode
  *
  * ### List of backing systems:
- * - SystemPageBacking (default)
+ * - SystemPageBackingStorage (default)
  * - ArenaBacking
  * - StaticBufferBacking
  * - MallocBacking
  * - HugePageBacking
  */
-template <typename T> concept BackingPolicy = requires(T backing, size_t bytes, void* ptr) {
+template <typename T> concept BackingStorage = requires(T backing, size_t bytes, void* ptr) {
     { backing.allocate_chunk(bytes) } noexcept -> std::convertible_to<void*>;
     { backing.deallocate_chunk(ptr, bytes) } noexcept -> std::same_as<void>;
 };
@@ -115,7 +115,7 @@ constexpr size_t DEFAULT_PAGE_SIZE = 4096; // Default to 4KB if sysconf fails
     return align(req_size, get_page_size());
 }
 
-class SystemPageBacking {
+class SystemPageBackingStorage {
   public:
     [[nodiscard]] inline void* allocate_chunk(size_t bytes) noexcept {
         if (bytes == 0) [[unlikely]] {
