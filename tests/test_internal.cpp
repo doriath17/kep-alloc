@@ -41,7 +41,7 @@ TEST(SystemPageBackingTest, AllocateChunkReturnsNonNullForValidSize) {
     size_t page_size = get_page_size();
     void* ptr = backing.allocate_chunk(page_size);
     EXPECT_NE(ptr, nullptr);
-    backing.deallocate_chunk(ptr, page_size);   
+    backing.deallocate_chunk(ptr, page_size);
 }
 
 TEST(SystemPageBackingTest, AllocateChunkReturnsNullForZeroSize) {
@@ -58,13 +58,15 @@ TEST(SystemPageBackingTest, DeallocateChunkHandlesNullPointer) {
 TEST(SystemPageBackingTest, DeallocateChunkHandlesZeroSize) {
     SystemPageBacking backing;
     void* ptr = backing.allocate_chunk(1024);
-    backing.deallocate_chunk(ptr, 0); // Should not crash or throw
+    backing.deallocate_chunk(ptr, 0);    // Should not crash or throw
     backing.deallocate_chunk(ptr, 1024); // Clean up
 }
 
-void test_allocate_and_deallocate(SystemPageBacking& backing, size_t size, std::string_view test_case_msg = "") {
+void test_allocate_and_deallocate(SystemPageBacking& backing, size_t size,
+                                  std::string_view test_case_msg = "") {
     void* ptr = backing.allocate_chunk(size);
-    EXPECT_NE(ptr, nullptr) << "Allocation failed for size: " << size << " bytes. " << test_case_msg;
+    EXPECT_NE(ptr, nullptr) << "Allocation failed for size: " << size << " bytes. "
+                            << test_case_msg;
     backing.deallocate_chunk(ptr, size);
 }
 
@@ -74,10 +76,16 @@ TEST(SystemPageBackingTest, AllocateAndDeallocateMultipleChunks) {
 
     test_allocate_and_deallocate(backing, page_size, "Testing allocation of 1 page.");
     test_allocate_and_deallocate(backing, page_size * 2, "Testing allocation of 2 pages.");
-    test_allocate_and_deallocate(backing, page_size + 1, "Testing allocation of page_size + 1 bytes -- page lower boundary.");
-    test_allocate_and_deallocate(backing, page_size + (page_size >> 2), "Testing allocation of page_size + (page_size >> 2) bytes -- in the middle.");
-    test_allocate_and_deallocate(backing, page_size * 2 - 1, "Testing allocation of page_size * 2 - 1 bytes -- page upper boundary.");
+    test_allocate_and_deallocate(
+        backing, page_size + 1,
+        "Testing allocation of page_size + 1 bytes -- page lower boundary.");
+    test_allocate_and_deallocate(
+        backing, page_size + (page_size >> 2),
+        "Testing allocation of page_size + (page_size >> 2) bytes -- in the middle.");
+    test_allocate_and_deallocate(
+        backing, page_size * 2 - 1,
+        "Testing allocation of page_size * 2 - 1 bytes -- page upper boundary.");
     test_allocate_and_deallocate(backing, page_size * 10, "Testing allocation of 10 pages.");
-}   
+}
 
 } // namespace kep_alloc::internal::testing

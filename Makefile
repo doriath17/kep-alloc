@@ -20,7 +20,7 @@ build-lib:
 build-demo:
 	cmake --build build --target demo -j
 
-build-tests:
+build-tests: clean-tests config-debug
 	cmake --build build --target tests -j
 
 # Quality & Tooling
@@ -46,3 +46,6 @@ docs:
 # Cleanup
 clean:
 	rm -rf build
+
+clean-tests: 
+	rm -rf build/tests

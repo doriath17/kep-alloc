@@ -1,25 +1,21 @@
 #pragma once
+#include "../utils.hpp"
+
 #include <concepts>
 #include <cstddef>
-#include <type_traits>
-
-#include <cstddef>
-#include <unistd.h>
-
 #include <sys/mman.h>
-
-#include "../utils.hpp"
+#include <type_traits>
+#include <unistd.h>
 
 namespace kep_alloc::internal {
 
-
 /**
  * @brief Backing system policy to allocate memory.
- * 
+ *
  * # Notes
- * Allocators can define a policy to allocate/request memory. This can be achieved in 
+ * Allocators can define a policy to allocate/request memory. This can be achieved in
  * two main ways:
- * - inheritance (dynamic polymorphism): 
+ * - inheritance (dynamic polymorphism):
  * you can implement an interface like this:
  * @code{.cpp}
  * class IBackingPolicy {
@@ -29,14 +25,18 @@ namespace kep_alloc::internal {
  *      virtual void deallocate_chunk(void* ptr, std::size_t bytes) = 0;
  * };
  * @endcode
- * However this will add some runtime overhead due to the vtable lookup when calling the virtual functions.
- * 
+ * However this will add some runtime overhead due to the vtable lookup when calling the virtual
+ * functions.
+ *
  * - templates (static polymorphism):
- * this is the actual approach i choose. Templates are resolved at compile time so there is no overhead at runtime, so you can achieve the same benefits of the virtual inheritance but with actual zero costs. Furthermore, in modern C++ (C++ 20) there is also the possibility to create `concepts` and actually enforce that a certain template type parameter implement that concept: 
+ * this is the actual approach i choose. Templates are resolved at compile time so there is no
+ * overhead at runtime, so you can achieve the same benefits of the virtual inheritance but with
+ * actual zero costs. Furthermore, in modern C++ (C++ 20) there is also the possibility to create
+ * `concepts` and actually enforce that a certain template type parameter implement that concept:
  * @code{.cpp}
  * template <BackingPolicy Backing = SystemPageBacking>
  * @endcode
- * 
+ *
  * ### List of backing systems:
  * - SystemPageBacking (default)
  * - ArenaBacking
@@ -44,10 +44,9 @@ namespace kep_alloc::internal {
  * - MallocBacking
  * - HugePageBacking
  */
-template <typename T>
-concept BackingPolicy = requires(T backing, size_t bytes, void* ptr) {
-    {backing.allocate_chunk(bytes)} noexcept -> std::convertible_to<void*>;
-    {backing.deallocate_chunk(ptr, bytes)} noexcept -> std::same_as<void>;
+template <typename T> concept BackingPolicy = requires(T backing, size_t bytes, void* ptr) {
+    { backing.allocate_chunk(bytes) } noexcept -> std::convertible_to<void*>;
+    { backing.deallocate_chunk(ptr, bytes) } noexcept -> std::same_as<void>;
 };
 
 constexpr size_t DEFAULT_PAGE_SIZE = 4096; // Default to 4KB if sysconf fails
@@ -76,7 +75,6 @@ constexpr size_t DEFAULT_PAGE_SIZE = 4096; // Default to 4KB if sysconf fails
     return page_size;
 }
 
-
 /**
  * @brief Normalizes a requested size up to the nearest multiple of the OS page size.
  *
@@ -94,7 +92,7 @@ constexpr size_t DEFAULT_PAGE_SIZE = 4096; // Default to 4KB if sysconf fails
  *
  * ### Bitwise Formula Explanation
  * Since `page_size` is always a power of two (\f$2^N\f$), its binary representation
- * has a single '1' bit at position \f$N\f$, with all lower bits set to '0' (representing 
+ * has a single '1' bit at position \f$N\f$, with all lower bits set to '0' (representing
  * the offset within a page).
  *
  * **Example:** `req_size` = 12,841 B, `page_size` = 4,096 B (4 KB, \f$N = 12\f$)
@@ -118,8 +116,7 @@ constexpr size_t DEFAULT_PAGE_SIZE = 4096; // Default to 4KB if sysconf fails
 }
 
 class SystemPageBacking {
-public: 
-
+  public:
     [[nodiscard]] inline void* allocate_chunk(size_t bytes) noexcept {
         if (bytes == 0) [[unlikely]] {
             return nullptr;
@@ -128,7 +125,8 @@ public:
         // TODO: maybe this is done automatically by mmap
         auto norm_size = normalize_size(bytes);
 
-        void* chunk_ptr = mmap(NULL, norm_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        void* chunk_ptr =
+            mmap(NULL, norm_size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
         if (chunk_ptr == MAP_FAILED) [[unlikely]] {
             return nullptr;
         }
@@ -145,6 +143,4 @@ public:
         munmap(ptr, norm_size);
     }
 };
-}
-
-
+} // namespace kep_alloc::internal

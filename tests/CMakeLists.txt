@@ -18,6 +18,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(kep_alloc_tests
   test_internal.cpp
+test_arena_allocator.cpp
 )
 
 # Link against GoogleTest and kep_alloc
