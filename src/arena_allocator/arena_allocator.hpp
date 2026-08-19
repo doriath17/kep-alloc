@@ -167,21 +167,39 @@ class ArenaAllocator {
 
     ~ArenaAllocator() { m_backing.deallocate_chunk(m_base_ptr, m_size); }
 
-    // TODO: implement copy and move
     ArenaAllocator(const ArenaAllocator& source) {
-        auto new_arena = ArenaAllocator(source.m_backing, source.m_size);
-        memcpy(new_arena.m_base_ptr, source.m_base_ptr, source.get_marker());
-        new_arena.rewind_to(source.get_marker());
+        *this = source; // Use copy assignment operator
     }
 
     ArenaAllocator(ArenaAllocator&& source) noexcept {
-        m_backing = source.m_backing;
-        m_size = source.m_size;
-        m_base_ptr = source.m_base_ptr;
-        m_alloc_ptr = source.m_alloc_ptr;
-        source.m_base_ptr = nullptr;
-        source.m_alloc_ptr = nullptr;
-        source.m_size = 0;
+        *this = std::move(source); // Use move assignment operator
+    }
+
+    ArenaAllocator& operator=(const ArenaAllocator& source) {
+        if (this != &source) {
+            m_backing = source.m_backing;
+            m_size = source.m_size;
+            m_base_ptr = m_backing.allocate_chunk(m_size);
+            if (m_base_ptr == nullptr) {
+                throw std::bad_alloc();
+            }
+            memcpy(m_base_ptr, source.m_base_ptr, source.get_marker());
+            m_alloc_ptr = reinterpret_cast<void*>(reinterpret_cast<size_t>(m_base_ptr) + source.get_marker());
+        }
+        return *this;
+    }
+
+    ArenaAllocator& operator=(ArenaAllocator&& source) noexcept {
+        if (this != &source) {
+            m_backing = source.m_backing;
+            m_size = source.m_size;
+            m_base_ptr = source.m_base_ptr;
+            m_alloc_ptr = source.m_alloc_ptr;
+            source.m_base_ptr = nullptr;
+            source.m_alloc_ptr = nullptr;
+            source.m_size = 0;
+        }
+        return *this;
     }
 
     /**
