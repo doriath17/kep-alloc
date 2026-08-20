@@ -18,7 +18,9 @@ Point2D random_point() {
     return Point2D(static_cast<float>(rand()) / RAND_MAX, static_cast<float>(rand()) / RAND_MAX);
 }
 
-Point2D* allocate_point(kep_alloc::ArenaAllocator<kep_alloc::internal::SystemPageBackingStorage> &arena, float x = 0, float y = 0) {
+Point2D*
+allocate_point(kep_alloc::ArenaAllocator<kep_alloc::internal::SystemPageBackingStorage>& arena,
+               float x = 0, float y = 0) {
     Point2D* p = static_cast<Point2D*>(arena.allocate(sizeof(Point2D), alignof(Point2D)));
     EXPECT_NE(p, nullptr);
     new (p) Point2D(x, y); // Placement new to construct
@@ -54,7 +56,9 @@ TEST(ArenaAllocatorTest, MarkerIsCorrect) {
     auto marker_after_p1 = allocator.get_marker();
     EXPECT_EQ(marker_after_p1, sizeof(Point2D) * 2);
 
-    // for a 4KB arena and with sizeof(Point2D) =  8 bytes, you can allocate, in addition to the two points already allocated, 510 more points (for a total of 512 points) before running out of space.
+    // for a 4KB arena and with sizeof(Point2D) =  8 bytes, you can allocate, in addition to the two
+    // points already allocated, 510 more points (for a total of 512 points) before running out of
+    // space.
     auto marker_before_last_allocation = allocator.get_marker();
     for (int i = 0; i < 510; ++i) {
         allocate_point(allocator);
@@ -87,8 +91,5 @@ TEST(ArenaAllocatorTest, RewindToMarker) {
     auto p2 = allocate_point(allocator);
     EXPECT_NE(p2, nullptr);
 }
-
-
-
 
 } // namespace kep_alloc::testing

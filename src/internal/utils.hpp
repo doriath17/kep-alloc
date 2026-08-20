@@ -42,4 +42,10 @@ inline bool is_aligned(size_t val, size_t alignment) noexcept {
     return (val & (alignment - 1)) == 0;
 }
 
+inline size_t check_and_align(size_t val, size_t alignment) noexcept {
+    if (!is_aligned(val, alignment)) {
+        val = internal::align(val, alignment);
+    }
+}
+
 } // namespace kep_alloc::internal

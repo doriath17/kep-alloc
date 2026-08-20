@@ -184,7 +184,8 @@ class ArenaAllocator {
                 throw std::bad_alloc();
             }
             memcpy(m_base_ptr, source.m_base_ptr, source.get_marker());
-            m_alloc_ptr = reinterpret_cast<void*>(reinterpret_cast<size_t>(m_base_ptr) + source.get_marker());
+            m_alloc_ptr =
+                reinterpret_cast<void*>(reinterpret_cast<size_t>(m_base_ptr) + source.get_marker());
         }
         return *this;
     }

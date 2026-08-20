@@ -30,6 +30,7 @@ set(KEP_ALLOC_SOURCES
 # 
 set(KEP_ALLOC_HEADERS
     src/arena_allocator/arena_allocator.hpp
+    src/slab_allocator/slab_allocator.hpp
     src/internal/utils.hpp
     src/internal/backing/backing_storage.hpp
 )
